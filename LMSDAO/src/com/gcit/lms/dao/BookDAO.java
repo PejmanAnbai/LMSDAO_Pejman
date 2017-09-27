@@ -9,8 +9,7 @@ import java.util.List;
 import com.gcit.lms.entity.Author;
 import com.gcit.lms.entity.Book;
 
-@SuppressWarnings({ "unchecked", "rawtypes" })
-public class BookDAO extends BaseDAO {
+public class BookDAO extends BaseDAO <Book>{
 
 	public BookDAO(Connection conn) {
 		super(conn);
@@ -48,23 +47,25 @@ public class BookDAO extends BaseDAO {
 	}
 
 	@Override
-	public List extractData(ResultSet rs) throws SQLException {
+	public List<Book> extractData(ResultSet rs) throws SQLException {
 		AuthorDAO adao = new AuthorDAO(conn);
+		GenreDAO gdao = new GenreDAO(conn);
+		PublisherDAO pdao = new PublisherDAO(conn);
 		List<Book> books = new ArrayList<>();
 		while (rs.next()) {
 			Book b = new Book();
 			b.setBookId(rs.getInt("bookId"));
 			b.setTitle(rs.getString("title"));
 			b.setAuthors(adao.readAllFirstLevel("SELECT * FROM tbl_author WHERE authorId IN (SELECT authorId FROM tbl_book_authors WHERE bookId = ?)", new Object[]{b.getBookId()}));
-			//do the same for genres
-			//do the same for One Publisher
+			b.setGenres(gdao.readAllFirstLevel("SELECT * FROM tbl_genre WHERE genre_id IN (SELECT genre_id FROM tbl_book_genre WHERE bookId = ?)", new Object[]{b.getBookId()}));
+			b.setPublisher((pdao.readAllFirstLevel("SELECT * FROM tbl_publisher WHERE pubId IN (SELECT pubId FROM tbl_book WHERE bookId = ?)", new Object[]{b.getBookId()})).get(0));
 			books.add(b);
 		}
 		return books;
 	}
 	
 	@Override
-	public List extractDataFirstLevel(ResultSet rs) throws SQLException {
+	public List<Book> extractDataFirstLevel(ResultSet rs) throws SQLException {
 		List<Book> books = new ArrayList<>();
 		while (rs.next()) {
 			Book b = new Book();

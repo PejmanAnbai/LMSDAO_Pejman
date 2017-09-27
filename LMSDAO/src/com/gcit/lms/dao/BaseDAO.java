@@ -44,7 +44,7 @@ public abstract class BaseDAO<T> {
 		return null;
 	}
 
-	public List<?> readAll(String sql, Object[] vals) throws SQLException {
+	public List<T> readAll(String sql, Object[] vals) throws SQLException {
 		PreparedStatement pstmt = conn.prepareStatement(sql);
 		if (vals != null) {
 			int count = 1;
@@ -59,7 +59,7 @@ public abstract class BaseDAO<T> {
 
 	public abstract List<T> extractData(ResultSet rs) throws SQLException;
 
-	public List<?> readAllFirstLevel(String sql, Object[] vals) throws SQLException {
+	public List<T> readAllFirstLevel(String sql, Object[] vals) throws SQLException {
 		PreparedStatement pstmt = conn.prepareStatement(sql);
 		if (vals != null) {
 			int count = 1;
