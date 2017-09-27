@@ -1,9 +1,48 @@
 package com.gcit.lms.entity;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Genre {
+public class Genre implements Serializable{
 	
+	
+	private static final long serialVersionUID = 7931395142777588653L;
+	
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((genreId == null) ? 0 : genreId.hashCode());
+		result = prime * result + ((genreName == null) ? 0 : genreName.hashCode());
+		return result;
+	}
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Genre other = (Genre) obj;
+		if (genreId == null) {
+			if (other.genreId != null)
+				return false;
+		} else if (!genreId.equals(other.genreId))
+			return false;
+		if (genreName == null) {
+			if (other.genreName != null)
+				return false;
+		} else if (!genreName.equals(other.genreName))
+			return false;
+		return true;
+	}
 	private Integer genreId;
 	private String genreName;
 	private List<Book> books;
